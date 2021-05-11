@@ -16,7 +16,9 @@
    limitations under the License.
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -25,9 +27,9 @@
     <version>7</version>
   </parent>
 
-  <groupId>com.github.stephenc.monte</groupId>
+  <groupId>org.bytes2gram.monte</groupId>
   <artifactId>monte-screen-recorder</artifactId>
-  <version>0.7.7.1-SNAPSHOT</version>
+  <version>0.7.8</version>
 
   <name>Monte Screen Recorder</name>
   <description>
@@ -42,10 +44,42 @@
     </license>
   </licenses>
 
+  <developers>
+    <developer>
+      <name>Werner Randelshofer</name>
+      <url>http://www.randelshofer.ch/monte/</url>
+      <roles>
+        <role>Project Admin</role>
+        <role>Committer</role>
+      </roles>
+    </developer>
+    <developer>
+      <id>stephenc</id>
+      <name>Stephen Connolly</name>
+      <url>https://github.com/stephenc</url>
+      <roles>
+        <role>Project Admin</role>
+        <role>Committer</role>
+      </roles>
+    </developer>
+  </developers>
+
+  <!-- Contributors -->
+  <contributors>
+    <contributor>
+      <name>Dineshkumar Kuppan</name>
+      <roles>
+        <role>developer</role>
+      </roles>
+      <timezone>+5</timezone>
+    </contributor>
+  </contributors>
+
   <scm>
-    <connection>scm:git:git://github.com/stephenc/monte-screen-recorder.git</connection>
-    <developerConnection>scm:git:git@github.com:stephenc/monte-screen-recorder.git</developerConnection>
-    <url>http://github.com/stephenc/monte-screen-recorder/tree/master/</url>
+    <connection>scm:git:git://github.com/bytes2gram/monte-screen-recorder.git</connection>
+    <developerConnection>scm:git:git@github.com:bytes2gram/monte-screen-recorder.git
+    </developerConnection>
+    <url>https://github.com/bytes2gram/monte-screen-recorder</url>
     <tag>HEAD</tag>
   </scm>
 
@@ -54,6 +88,8 @@
     <project.build.outputEncoding>UTF-8</project.build.outputEncoding>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <mavenVersion>3.0</mavenVersion>
+    <java.compiler.version>1.8</java.compiler.version>
+    <javadoc.opts>-Xdoclint:none</javadoc.opts>
   </properties>
 
   <build>
@@ -105,8 +141,14 @@
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>${java.compiler.version}</source>
+          <target>${java.compiler.version}</target>
+          <fork>true</fork>
+          <compilerReuseStrategy>alwaysNew</compilerReuseStrategy>
+          <!-- Need to encode in UTF 8 for unit tests that contain these chars -->
+          <encoding>${project.build.sourceEncoding}</encoding>
+          <showDeprecation>true</showDeprecation>
+          <showWarnings>true</showWarnings>
         </configuration>
       </plugin>
       <plugin>
@@ -114,10 +156,46 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>ScreenRecorder</mainClass>
+              <mainClass>org.bytes2gram.monte.ScreenRecorder</mainClass>
             </manifest>
           </archive>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>2.10.4</version>
+        <configuration>
+          <minmemory>128m</minmemory>
+          <maxmemory>512</maxmemory>
+          <source>${java.compiler.version}</source>
+          <overview>${basedir}/src/main/resources/overview.html</overview>
+          <links>
+            <link>http://docs.oracle.com/javase/8/docs/api/</link>
+          </links>
+          <additionalparam>${javadoc.opts}</additionalparam>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
