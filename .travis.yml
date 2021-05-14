@@ -1,13 +1,20 @@
 dist: trusty
 language: java
+os: linux
 jdk:
-  - oraclejdk8
+  - openjdk8
 notifications:
   email:
     - email2dineshkuppan@gmail.com
 branches:
-only:
-  - master
+  only:
+    - master
+    - develop
+
 cache:
   directories:
     - "$HOME/.m2"
+    -
+env:
+  global:
+    - GPG_DIR="`pwd`/deploy"
